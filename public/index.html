@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daily Work Board</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">DW</div>
+          <div>
+            <h1>Daily Work</h1>
+            <p>Personal issue tracker</p>
+          </div>
+        </div>
+
+        <section class="summary">
+          <div class="metric">
+            <span class="metric-label">Open</span>
+            <strong id="openCount">0</strong>
+          </div>
+          <div class="metric">
+            <span class="metric-label">In flight</span>
+            <strong id="activeCount">0</strong>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Done this week</span>
+            <strong id="doneCount">0</strong>
+          </div>
+        </section>
+
+        <section class="activity-panel">
+          <div class="section-header">
+            <h2>Today</h2>
+          </div>
+          <ul id="todayList" class="compact-list"></ul>
+        </section>
+
+        <section class="activity-panel">
+          <div class="section-header">
+            <h2>High priority</h2>
+          </div>
+          <ul id="priorityList" class="compact-list"></ul>
+        </section>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div class="topbar-copy">
+            <h2>Board</h2>
+            <p>Track daily tasks across backlog, execution, review, and completion.</p>
+          </div>
+          <button id="newIssueButton" class="primary-button" type="button">New issue</button>
+        </header>
+
+        <section class="toolbar" aria-label="Filters">
+          <label class="field search-field">
+            <span>Search</span>
+            <input id="searchInput" type="search" placeholder="Search title, description, or tag" />
+          </label>
+
+          <label class="field">
+            <span>Assignee</span>
+            <select id="assigneeFilter"></select>
+          </label>
+
+          <label class="field">
+            <span>Priority</span>
+            <select id="priorityFilter">
+              <option value="all">All priorities</option>
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>View</span>
+            <select id="viewMode">
+              <option value="board">Board</option>
+              <option value="list">List</option>
+            </select>
+          </label>
+        </section>
+
+        <section id="boardView" class="board-view" aria-label="Issue board"></section>
+
+        <section id="listView" class="list-view hidden" aria-label="Issue list">
+          <div class="list-header">
+            <span>Key</span>
+            <span>Title</span>
+            <span>Status</span>
+            <span>Priority</span>
+            <span>Due</span>
+            <span>Assignee</span>
+          </div>
+          <div id="issueTable" class="list-body"></div>
+        </section>
+      </main>
+
+      <section class="detail-panel">
+        <div class="section-header">
+          <h2>Issue details</h2>
+        </div>
+        <div id="formMessage" class="form-message hidden" role="status" aria-live="polite"></div>
+        <form id="issueForm" class="detail-form">
+          <input id="issueId" type="hidden" />
+
+          <label class="field">
+            <span>Title</span>
+            <input id="titleInput" type="text" required />
+          </label>
+
+          <label class="field">
+            <span>Description</span>
+            <textarea id="descriptionInput" rows="6"></textarea>
+          </label>
+
+          <div class="field-row">
+            <label class="field">
+              <span>Status</span>
+              <select id="statusInput"></select>
+            </label>
+
+            <label class="field">
+              <span>Priority</span>
+              <select id="priorityInput">
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="field-row">
+            <label class="field">
+              <span>Assignee</span>
+              <input id="assigneeInput" type="text" placeholder="Your name" />
+            </label>
+
+            <label class="field">
+              <span>Due date</span>
+              <input id="dueDateInput" type="date" />
+            </label>
+          </div>
+
+          <label class="field">
+            <span>Tags</span>
+            <input id="tagsInput" type="text" placeholder="frontend, docs, follow-up" />
+          </label>
+
+          <div class="field-row actions">
+            <button class="primary-button" type="submit">Save issue</button>
+            <button id="clearButton" class="secondary-button" type="button">Clear</button>
+            <button id="deleteButton" class="danger-button" type="button">Delete</button>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <template id="issueCardTemplate">
+      <article class="issue-card" draggable="true">
+        <div class="issue-card-top">
+          <span class="issue-key"></span>
+          <span class="priority-badge"></span>
+        </div>
+        <h3 class="issue-title"></h3>
+        <p class="issue-description"></p>
+        <div class="issue-meta">
+          <span class="issue-assignee"></span>
+          <span class="issue-due"></span>
+        </div>
+        <div class="tag-row"></div>
+      </article>
+    </template>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
