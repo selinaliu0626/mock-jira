@@ -576,8 +576,9 @@ async function requestJson(url, options = {}) {
   const contentType = response.headers.get('content-type') || '';
   if (!contentType.includes('application/json')) {
     const text = await response.text();
+    const responsePreview = text.trim().slice(0, 160);
     throw new Error(
-      `Backend returned ${contentType || 'a non-JSON response'}. Open the app at http://127.0.0.1:3000 and hard refresh.`
+      `Backend returned ${contentType || 'a non-JSON response'}${responsePreview ? `: ${responsePreview}` : ''}. Open the app at http://127.0.0.1:3000 and hard refresh.`
     );
   }
 
