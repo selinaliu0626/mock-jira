@@ -252,21 +252,23 @@ textarea {
   border-radius: 8px;
   padding: 12px;
   display: grid;
-  gap: 10px;
+  gap: 8px;
   cursor: pointer;
   box-shadow: var(--shadow);
+  align-content: start;
+  min-width: 0;
 }
 
 .issue-card.active {
   border-color: var(--accent);
 }
 
-.issue-card-top,
-.issue-meta {
+.issue-card-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .issue-key,
@@ -304,14 +306,53 @@ textarea {
   margin: 0;
   font-size: 0.96rem;
   line-height: 1.4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
 }
 
-.issue-description,
-.issue-meta {
+.issue-description {
   margin: 0;
   color: var(--muted);
   font-size: 0.85rem;
   line-height: 1.45;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+.issue-footer {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  align-items: start;
+}
+
+.issue-meta {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.issue-meta-right {
+  text-align: right;
+}
+
+.issue-meta-label {
+  color: var(--muted);
+  font-size: 0.74rem;
+}
+
+.issue-assignee,
+.issue-due {
+  font-size: 0.84rem;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .tag-row {
@@ -323,6 +364,16 @@ textarea {
 .tag {
   background: rgba(255, 255, 255, 0.05);
   color: #cdd5e1;
+}
+
+@media (max-width: 1180px) {
+  .issue-footer {
+    grid-template-columns: 1fr;
+  }
+
+  .issue-meta-right {
+    text-align: left;
+  }
 }
 
 .detail-panel {

@@ -460,6 +460,12 @@ function getSelectedIssue() {
 }
 
 function renderIssueCard(issue) {
+  const description = getIssueCardDescription(issue.description);
+  const dueLabel = issue.dueDate ? formatDueDate(issue.dueDate) : 'No due date';
+  const tagsMarkup = issue.tags.length
+    ? `<div class="tag-row">${issue.tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}</div>`
+    : '';
+
   return `
     <article class="issue-card" draggable="true" data-issue-id="${issue.id}">
       <div class="issue-card-top">
@@ -467,12 +473,18 @@ function renderIssueCard(issue) {
         <span class="priority-badge ${issue.priority}">${capitalize(issue.priority)}</span>
       </div>
       <h3 class="issue-title">${escapeHtml(issue.title)}</h3>
-      <p class="issue-description">${escapeHtml(truncate(issue.description || 'No description', 110))}</p>
-      <div class="issue-meta">
-        <span class="issue-assignee">${escapeHtml(issue.assignee)}</span>
-        <span class="issue-due">${issue.dueDate || 'No date'}</span>
+      <p class="issue-description">${escapeHtml(description)}</p>
+      <div class="issue-footer">
+        <div class="issue-meta">
+          <span class="issue-meta-label">Assignee</span>
+          <span class="issue-assignee">${escapeHtml(issue.assignee)}</span>
+        </div>
+        <div class="issue-meta issue-meta-right">
+          <span class="issue-meta-label">Due</span>
+          <span class="issue-due">${escapeHtml(dueLabel)}</span>
+        </div>
       </div>
-      <div class="tag-row">${issue.tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}</div>
+      ${tagsMarkup}
     </article>
   `;
 }
@@ -491,6 +503,27 @@ function truncate(value, maxLength) {
   }
 
   return `${value.slice(0, maxLength - 1)}...`;
+}
+
+function getIssueCardDescription(description) {
+  const normalized = (description || '').replace(/\s+/g, ' ').trim();
+  if (!normalized) {
+    return 'No description';
+  }
+
+  return truncate(normalized, 140);
+}
+
+function formatDueDate(value) {
+  const date = new Date(`${value}T00:00:00`);
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return date.toLocaleDateString(undefined, {
+    month: 'short',
+    day: 'numeric',
+  });
 }
 
 function escapeHtml(value) {
